@@ -7,7 +7,6 @@ from .models import(
 )
 
 
-
 class BookListSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(
         source='author.name'   # books.name?
@@ -15,7 +14,7 @@ class BookListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ['author', 'title', 'genre', 'image_link']
+        fields = ['author', 'title', 'genre', 'image']
 
 
 # class CurrentAuthorDefault:
@@ -28,16 +27,27 @@ class BookListSerializer(serializers.ModelSerializer):
 #         return '%s()' % self.__class__.__name__
 
 
-class BookCreateSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=150)
-    description = serializers.CharField(max_length=5000)
-    image_link = serializers.CharField(max_length=255)
-    year = serializers.IntegerField()   #
-    pages = serializers.IntegerField()  #
-    number_of_copies = serializers.IntegerField()
-    number_available = serializers.IntegerField()
+class BookSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.username')
+    class Meta:
+        model = Book
+        fields = '__all__'
+
+    def validate_price(self, price):
+        if price < 0:
+            raise serializers.ValidationError(
+                'Цена не может быть отрицательной'
+            )
+        return price
+
+    def validate_quantity(self, quantity):
+        if quantity < 0:
+            raise serializers.ValidationError('Количество не может быть отрицательным')
+        return quantity
 
     def validate(self, attrs):
+        # user = self.context['request'].user   # надо ли? в нашем случае
+        # attrs['user'] = user                  # надо ли? в нашем случае
         title = attrs.get('title')
         if Book.objects.filter(title=title).exists():
             raise serializers.ValidationError(
@@ -45,25 +55,11 @@ class BookCreateSerializer(serializers.ModelSerializer):
             ) 
         return attrs
  
-    # def create(self, validated_data):                       # надо ли
-    #     genre = validated_data.pop('genre')
-    #     book = Book.objects.create(**validated_data)
-    #     book.genre.set(genre)
-    #     return book
-
-    class Meta:
-        model = Book
-        fields = '__all__'
-
-
-class BookSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(
-        source='author.name'
-    )
-
-    class Meta:
-        model = Book
-        fields = '__all__'
+    def create(self, validated_data):                       # надо ли
+        genre = validated_data.pop('genre')
+        book = Book.objects.create(**validated_data)
+        book.genre.set(genre)
+        return book
 
 
 class AuthorListSerializer(serializers.ModelSerializer):
@@ -73,9 +69,10 @@ class AuthorListSerializer(serializers.ModelSerializer):
 
 
 class AuthorRetrieveSerializer(serializers.ModelSerializer):
+    books = BookListSerializer(read_only=True, many=True)   
     class Meta:
         model = Author
-        fields = ['name', 'books__title']
+        fields = ['name', 'books']
 
     def to_representation(self, instance: Author):
         books = instance.books.all()
@@ -88,15 +85,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = '__all__'
-
-
-class AuthorCreateSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(max_length=50, required=True)
-    last_name = serializers.CharField(max_length=50, required=True)
-    about = serializers.CharField(max_length=5000, required=True)
-    avatar = serializers.CharField(max_length=250, required=True)
-    name = str(first_name) + ' ' + str(last_name)
+        fields = ('__all__')
 
     def validate(self, attrs):
         author = attrs.get('name')
@@ -105,10 +94,6 @@ class AuthorCreateSerializer(serializers.ModelSerializer):
                 'Such author already exists.'
             ) 
         return attrs
-
-    class Meta:
-        model = Author
-        fields = ('__all__')
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -132,9 +117,10 @@ class GenreListSerializer(serializers.ModelSerializer):
 
 
 class GenreRetrieveSerializer(serializers.ModelSerializer):
+    books = BookListSerializer(read_only=True, many=True)  
     class Meta:
         model = Genre
-        exclude = ['slug']
+        fields = ['genre', 'books']
 
     def to_representation(self, instance: Genre):
         books = instance.books.all()
