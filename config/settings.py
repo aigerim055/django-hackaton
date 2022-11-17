@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     'apps.account',
     'apps.book',
+    'apps.bio',
 
 ]
 
