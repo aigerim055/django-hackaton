@@ -36,14 +36,14 @@ from .serializers import (
 class AuthorViewSet(ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    filter_backends = [
-        filters.SearchFilter, 
-        rest_filter.DjangoFilterBackend, 
-        filters.OrderingFilter
-        ]
-    search_fields = ['name'] 
-    filterset_fields = ['name']
-    ordering_fields = ['name']
+    # filter_backends = [
+    #     filters.SearchFilter, 
+    #     rest_filter.DjangoFilterBackend, 
+    #     filters.OrderingFilter
+    #     ]
+    # search_fields = ['name'] 
+    # filterset_fields = ['name']
+    # ordering_fields = ['name']
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -77,14 +77,14 @@ class AuthorViewSet(ModelViewSet):
 class BookViewSet(ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    filter_backends = [
-        filters.SearchFilter, 
-        rest_filter.DjangoFilterBackend, 
-        filters.OrderingFilter
-        ]
-    search_fields = ['title', 'author__name'] 
-    filterset_fields = ['genre__genre']
-    ordering_fields = ['created_at', 'title', 'author__name']
+    # filter_backends = [
+    #     filters.SearchFilter, 
+    #     rest_filter.DjangoFilterBackend, 
+    #     filters.OrderingFilter
+    #     ]
+    # search_fields = ['title', 'author__name'] 
+    # filterset_fields = ['genre__genre']
+    # ordering_fields = ['created_at', 'title', 'author__name']
 
     def get_serializer_class(self):
         if self.action == 'list':
