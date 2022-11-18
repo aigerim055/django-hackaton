@@ -25,7 +25,7 @@ class UserProfile(models.Model):
 
     class Meta:
         verbose_name = 'User profile'
-        verbose_name_plural = 'Users profiles'
+        verbose_name_plural = 'User profiles'
 
 
 class ProfileImage(models.Model):
