@@ -1,5 +1,5 @@
 from crypt import methods
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.permissions import(
     IsAdminUser,
     IsAuthenticated,
@@ -7,6 +7,7 @@ from rest_framework.permissions import(
 )
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import mixins
 
 from apps.bio.permissions import IsOwner
 from .models import Favorite
@@ -17,21 +18,25 @@ from .serializers import (
 
 
 
-class FavoriteViewSet(ModelViewSet):
+class FavoriteViewSet(mixins.CreateModelMixin,
+      mixins.ListModelMixin,
+      mixins.DestroyModelMixin,
+      GenericViewSet
+      ):
     serializer_class = FavoriteSerializer
     queryset = Favorite.objects.all()
 
     def perform_create(self, serializer): # для чего эта функция, чтобы не рописыать юзера в запрроме
         serializer.save(user=self.request.user)
 
+    # def get_serializer_class(self):
+    #     if self.action == 'favorite' and 
+    #     return super().get_serializer_class()
+
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            self.permission_classes = [AllowAny]
-        if self.action in ['create']:
+        if self.action == 'favorite' and self.request.method in ['POST', 'GET']:
             self.permission_classes = [IsAuthenticated]
-        if self.action in ['destroy']:
-            self.permission_classes = [IsOwner, IsAdminUser]
-        if self.action in ['destroy', 'update', 'partial_update']:
+        if self.action == 'favorite' and self.request.method =='DELETE':
             self.permission_classes = [IsOwner]
         return super().get_permissions()
 
