@@ -1,9 +1,17 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
+
+from apps.account.utils import normilize_phone
 
 from .models import (
     UserProfile, 
     ProfileImage
 )
+
+
+
+User = get_user_model()
+
 
 class UserProfileCreateSerializer(serializers.Serializer):
     user = serializers.ReadOnlyField(
@@ -32,8 +40,11 @@ class UserProfileCreateSerializer(serializers.Serializer):
         ProfileImage.objects.bulk_create(images)
         return profile
 
-    
-      
+    def validate_phone(self, phone):
+        phone = normilize_phone(phone)
+        if len(phone) != 13:
+            raise serializers.ValidationError('Invalid phone format!')
+        return phone      
 
     class Meta:
         model = UserProfile
