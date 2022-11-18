@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from apps.account.utils import normilize_phone
+from apps.account.utils import normalize_phone
 
 from .models import (
     UserProfile, 
@@ -41,7 +41,7 @@ class UserProfileCreateSerializer(serializers.Serializer):
 
 
     def validate_phone(self, phone):
-        phone = normilize_phone(phone)
+        phone = normalize_phone(phone)
         if len(phone) != 13:
             raise serializers.ValidationError('Invalid phone format!')
         return phone      
@@ -62,12 +62,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = '__all__'
 
-    # def to_representation(self, instance):
-    #     rep = super().to_representation(instance)
-    #     rep['avatar'] = ProfileImageSerializer(
-    #         instance.profile_images.all()
-    #     ).data 
-    #     return rep
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['avatar'] = ProfileImageSerializer(
+            instance.profile_images.all(),
+            many=True
+        ).data 
+        return rep
 
 
 class ProfileImageSerializer(serializers.ModelSerializer):
