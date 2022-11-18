@@ -18,10 +18,9 @@ class UserProfileCreateSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=20)
     last_name = serializers.CharField(max_length=40)
     bio = serializers.CharField(max_length=5000)
-    avatar = serializers.ImageField()   #######
+    avatar = serializers.ImageField()                          #######
     birthday = serializers.DateField()                         # settings include format   # формат как проверяется, выпдает ли календарь
-    phone = serializers.CharField(max_length=14) 
- 
+    phone = serializers.CharField(max_length=14)    # normalize
 
     def create(self, validated_data):
         avatar_carousel = validated_data.pop('avatar_carousel')
@@ -31,15 +30,11 @@ class UserProfileCreateSerializer(serializers.Serializer):
             images.append(ProfileImage(profile=profile, avatar=image))
         ProfileImage.objects.bulk_create(images)
         return profile
-
-    
       
-
     class Meta:
         model = UserProfile
         fields = ('__all__')
 
-    
 
 class UserProfileListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,8 +53,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     #         instance.profile_images.all()
     #     ).data 
     #     return rep
-
-    
 
 
 class ProfileImageSerializer(serializers.ModelSerializer):

@@ -2,8 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
 from .tasks import send_activation_sms
-from .utils import normilize_phone
-
+from .utils import normalize_phone
 
 
 User = get_user_model()
@@ -41,7 +40,7 @@ class ActivationSerializer(serializers.Serializer):
     code = serializers.CharField(max_length=10, required=True)
 
     def validate_phone(self, phone):
-        phone = normilize_phone(phone)
+        phone = normalize_phone(phone)
         if len(phone) != 13:
             raise serializers.ValidationError('Invalid phone format')
         if not User.objects.filter(phone=phone).exists():

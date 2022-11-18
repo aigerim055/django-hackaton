@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from slugify import slugify
 
 
@@ -27,8 +26,8 @@ class Author(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name = 'Автор'
-        verbose_name_plural = 'Авторы'
+        verbose_name = 'Author'
+        verbose_name_plural = 'Authors'
     
 
 class Book(models.Model):  
@@ -64,15 +63,15 @@ class Book(models.Model):
 
     class Meta:
         ordering = ['title']  
-        verbose_name = 'Произведение'
-        verbose_name_plural = 'Произведения'
+        verbose_name = 'Book'
+        verbose_name_plural = 'Books'
 
 
 class Genre(models.Model):                                       
     genre = models.CharField(max_length=30, unique=True)
     slug = models.SlugField(primary_key=True, blank=True, max_length=35)
     parent_genre = models.ForeignKey(
-        verbose_name='Родительский жанр',
+        verbose_name='Parent genre',
         to='self', 
         on_delete=models.CASCADE, 
         related_name='subgenres',
@@ -89,5 +88,5 @@ class Genre(models.Model):
         return super().save(*args, **kwargs)
 
     class Meta:
-        verbose_name = 'Жанр'
-        verbose_name_plural = 'Жанры'
+        verbose_name = 'Genre'
+        verbose_name_plural = 'Genres'
