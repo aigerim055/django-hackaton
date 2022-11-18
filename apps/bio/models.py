@@ -24,8 +24,8 @@ class UserProfile(models.Model):
         return f'{self.first_name} {self.last_name}' 
 
     class Meta:
-        verbose_name = 'Профиль пользователя'
-        verbose_name_plural = 'Профили пользователей'
+        verbose_name = 'User profile'
+        verbose_name_plural = 'Users profiles'
 
 
 class ProfileImage(models.Model):

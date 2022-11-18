@@ -36,13 +36,13 @@ class BookSerializer(serializers.ModelSerializer):
     def validate_price(self, price):
         if price < 0:
             raise serializers.ValidationError(
-                'Цена не может быть отрицательной'
+                'Price cannot be negative'
             )
         return price
 
     def validate_quantity(self, quantity):
         if quantity < 0:
-            raise serializers.ValidationError('Количество не может быть отрицательным')
+            raise serializers.ValidationError('Quantity cannot be negative')
         return quantity
 
     def validate(self, attrs):
