@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.account',
     'apps.book',
     'apps.bio',
+    'apps.order',
     'apps.review',
 ]
 
