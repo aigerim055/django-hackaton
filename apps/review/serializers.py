@@ -40,3 +40,28 @@ class FavoritesListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
         fields = ['user', 'book']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.username')
+    
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        attrs['user'] = user
+        return attrs
+
+
+class RatingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rating
+        fields = '__all__'
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        attrs['user'] = user
+        return attrs
