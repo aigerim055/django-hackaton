@@ -10,15 +10,17 @@ from rest_framework.response import Response
 from rest_framework import mixins
 
 from apps.bio.permissions import IsOwner
-from .models import Favorite
+from .models import Favorite, Comment, Rating
 from .serializers import (
     FavoriteSerializer,
-    FavoritesListSerializer
+    FavoritesListSerializer,
+    CommentSerializer,
+    RatingSerializer,
 )
 
 
 
-class FavoriteViewSet(mixins.CreateModelMixin,
+class FavoriteView(mixins.CreateModelMixin,
       mixins.ListModelMixin,
       mixins.DestroyModelMixin,
       GenericViewSet
@@ -57,3 +59,37 @@ class FavoriteViewSet(mixins.CreateModelMixin,
             if request.method == 'DELETE':
                 serializer.del_favorites()
                 return Response('successfully removed from favorites!')
+
+
+class CommentView(mixins.CreateModelMixin,
+                mixins.DestroyModelMixin,
+                mixins.ListModelMixin,
+                GenericViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer): 
+        serializer.save(user=self.request.user)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+
+class RatingView(mixins.CreateModelMixin,
+                mixins.DestroyModelMixin,
+                mixins.ListModelMixin,
+                GenericViewSet):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+    # def perform_create(self, serializer): 
+    #     serializer.save(user=self.request.user)
