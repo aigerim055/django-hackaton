@@ -17,6 +17,6 @@ router.register('rating', RatingView, 'rating')
 
 
 urlpatterns = [
-
+    # path('favorite/', FavoriteView.as_view(), name='favorite'),
 ]
 urlpatterns += router.urls

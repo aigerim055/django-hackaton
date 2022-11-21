@@ -57,3 +57,9 @@ class ActivationSerializer(serializers.Serializer):
         user.is_active = True
         user.activation_code = ''
         user.save()
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username']
