@@ -24,32 +24,29 @@ class FavoriteViewSet(mixins.CreateModelMixin,
     mixins.DestroyModelMixin,
     mixins.ListModelMixin,
     GenericViewSet):
-
-
     serializer_class = FavoriteSerializer
     queryset = Favorite.objects.all()
 
     def perform_create(self, serializer): # для чего эта функция, чтобы не рописыать юзера в запрроме
         serializer.save(user=self.request.user)
 
-    def get_serializer_class(self):
-        if self.action == 'favorite' and self.request.method in ['POST', 'DELETE', 'LIST']:
-            return FavoriteSerializer
-        # if self.action == 'favorite' and self.request.method == 'LIST':
-        #     return Favorite
-        return super().get_serializer_class()
+    # def get_serializer_class(self):
+    #     if self.action == 'like' and self.request.method in ['POST', 'LIST']:
+    #         return FavoriteSerializer
+    #     # if self.action == 'favorite' and self.request.method == 'LIST':
+    #     #     return Favorite
+    #     return super().get_serializer_class()
 
     def get_permissions(self):
-        if self.action == 'favorite' and self.request.method in ['POST']:
+        if self.action == 'favorite' and self.request.method == 'POST':
             self.permission_classes = [IsAuthenticated]
         if self.action == 'favorite' and self.request.method =='DELETE':
             self.permission_classes = [IsOwner]
         return super().get_permissions()
 
-
-    @action(detail=True)#, methods=['POST', 'DELETE'])
+    @action(detail=True, methods=['POST'])
     def favorite(self, request, pk=None):
-        book = self.get_object()
+        book = self.get_object().get('slug')
         serializer = FavoriteSerializer(
             data=request.data, 
             context={
@@ -61,8 +58,8 @@ class FavoriteViewSet(mixins.CreateModelMixin,
                 serializer.save(user=request.user)
                 return Response('Successfully added to favorites!')
             if request.method == 'DELETE':
-                serializer.del_favorite()
-                return Response('Successfully removed from favorites!')
+                        serializer.del_favorite()
+                        return Response('Successfully removed from favorites!')
 
 
 class CommentView(mixins.CreateModelMixin,
