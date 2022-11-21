@@ -1,8 +1,8 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from .views2 import (
-    FavoriteView,
+from .views import (
+    FavoriteViewSet,
     CommentView,
     RatingView
 )
@@ -11,7 +11,7 @@ from .views2 import (
 router = DefaultRouter()
 
 
-router.register('favorite', FavoriteView, 'favorite')
+router.register('favorite', FavoriteViewSet, 'favorite')
 router.register('comment', CommentView, 'comment')
 router.register('rating', RatingView, 'rating')
 
