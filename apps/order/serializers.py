@@ -35,6 +35,8 @@ class OrderSerializer(serializers.ModelSerializer):
             ))
             total_sum += item['book'].price * item['quantity']
         OrderItems.objects.bulk_create(orders_items, *args, **kwargs)
+        if self.reward != 0:
+            order.total_sum = total_sum - total_sum*self.reward
         order.total_sum = total_sum
         order.save()
         return order
