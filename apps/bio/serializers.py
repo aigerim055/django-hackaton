@@ -76,3 +76,10 @@ class ProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileImage
         fields = 'avatar',
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        fields = '__all__'
+        model = UserProfile
