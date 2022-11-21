@@ -9,3 +9,5 @@ python-decouple
 python-slugify
 
 twilio
+
+celery
