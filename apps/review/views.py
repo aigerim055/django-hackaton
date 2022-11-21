@@ -1,8 +1,5 @@
 from crypt import methods
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.permissions import(
     IsAdminUser,
     IsAuthenticated,
@@ -20,7 +17,6 @@ from .serializers import (
     CommentSerializer,
     RatingSerializer,
 )
-
 
 
 
@@ -68,36 +64,6 @@ class FavoriteViewSet(mixins.CreateModelMixin,
                 serializer.del_favorite()
                 return Response('Successfully removed from favorites!')
 
-    # def get_serializer_context(self):
-    # context = super().get_serializer_context()
-    # context['request'] = request
-    # return context
-
-    # def post(self, request):
-    #     serializer = FavoriteCreateSerializer(data=request.data)
-    #     if serializer.is_valid(raise_exception=True):
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    # def delete(self, request, pk, format=None):
-    #     serializer = FavoriteDeleteSerializer(data=request.data)
-    #     pk = request.book
-    #     like = self.get_object(pk)
-    #     like.delete()
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class CommentView(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    mixins.DestroyModelMixin,
-    GenericViewSet
-    ):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-                serializer.del_favorites()
-                return Response('successfully removed from favorites!')
-
 
 class CommentView(mixins.CreateModelMixin,
                 mixins.DestroyModelMixin,
@@ -131,4 +97,3 @@ class RatingView(mixins.CreateModelMixin,
 
     # def perform_create(self, serializer): 
     #     serializer.save(user=self.request.user)
-
