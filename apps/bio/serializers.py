@@ -49,6 +49,8 @@ class UserProfileCreateSerializer(serializers.Serializer):
     class Meta:
         model = UserProfile
         fields = ('__all__')
+        # exclude = ['cashback']
+
 
 
 class UserProfileListSerializer(serializers.ModelSerializer):
@@ -60,6 +62,7 @@ class UserProfileListSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
+        # exclude = ['cashback']
         fields = '__all__'
 
     def to_representation(self, instance):
