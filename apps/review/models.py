@@ -19,6 +19,9 @@ class Favorite(models.Model):
         related_name='favorites'
     )
 
+    def __str__(self):
+        return f'{self.user} liked {self.book}'
+
 
 class Comment(models.Model):
     book = models.ForeignKey(

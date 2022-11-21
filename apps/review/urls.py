@@ -11,6 +11,6 @@ router.register('favorite', FavoriteViewSet, 'favorite')
 
 
 urlpatterns = [
-
+    # path('favorite/', FavoriteView.as_view(), name='favorite'),
 ]
 urlpatterns += router.urls
