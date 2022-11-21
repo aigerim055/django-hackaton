@@ -1,13 +1,19 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from .views import FavoriteViewSet
+from .views2 import (
+    FavoriteView,
+    CommentView,
+    RatingView
+)
 
 
 router = DefaultRouter()
 
 
-router.register('favorite', FavoriteViewSet, 'favorite')
+router.register('favorite', FavoriteView, 'favorite')
+router.register('comment', CommentView, 'comment')
+router.register('rating', RatingView, 'rating')
 
 
 urlpatterns = [
