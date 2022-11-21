@@ -13,7 +13,7 @@ from apps.bio.permissions import IsOwner
 from .models import Favorite, Comment, Rating
 from .serializers import (
     FavoriteSerializer,
-    FavoritesListSerializer,
+    # FavoritesListSerializer,
     CommentSerializer,
     RatingSerializer,
 )
