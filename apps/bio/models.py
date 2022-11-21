@@ -18,6 +18,7 @@ class UserProfile(models.Model):
     avatar = models.ImageField(upload_to='media')   #upload_to='media')    #######
     birthday = models.DateField(null=True, blank=True)                         # settings include format   # формат как проверяется, выпдает ли календарь
     phone = models.CharField(max_length=14, null=True)    # проверка на номер телефона
+    cachback = models.PositiveIntegerField(verbose_name='cashback', default=0)
     registered_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
