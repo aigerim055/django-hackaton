@@ -18,10 +18,11 @@ class UserProfileCreateSerializer(serializers.Serializer):
         default=serializers.CurrentUserDefault(),
         source='user.username'
     )
-    avatar_carousel = serializers.ListField(
-        child=serializers.ImageField(),
-        write_only=True
-    )
+    # avatar_carousel = serializers.ListField(
+    #     child=serializers.ImageField(),
+    #     write_only=True,
+    #     # blank=True
+    # )
 
     first_name = serializers.CharField(max_length=20)
     last_name = serializers.CharField(max_length=40)

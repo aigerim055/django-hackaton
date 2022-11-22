@@ -34,5 +34,6 @@ class ProfileImage(models.Model):
     profile = models.ForeignKey(
         to=UserProfile,
         on_delete=models.CASCADE,
-        related_name='profile_images'
+        related_name='profile_images',
+        # blank=True
     )
