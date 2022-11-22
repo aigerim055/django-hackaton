@@ -43,10 +43,11 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderHistorySerializer(serializers.ModelSerializer):
+
     # url = serializers.ReadOnlyField(source='order.get_absolute_url')
     # book = serializers.ReadOnlyField(source='order.book')
-
+    
     class Meta:
         model = Order
-        fields = ('order_id', 'address', 'total_sum', 'status', 'created_at', 'books')#, 'url')
-     
+        fields = ('order_id', 'address', 'total_sum', 'status', 'created_at', 'books')
+
