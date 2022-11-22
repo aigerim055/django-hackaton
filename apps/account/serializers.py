@@ -1,11 +1,21 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.conf import settings
 
-from .tasks import send_activation_sms
+from .tasks import send_activation_sms, send_activation_email
 from .utils import normalize_phone
 
 
 User = get_user_model()
+
+
+def email_validator(email):
+        if not User.objects.filter(email=email).exists():
+            raise serializers.ValidationError(
+                'User with such email is not found.'
+            )
+        return email
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -28,10 +38,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Passwords do not match')
         return attrs
 
-    def create(self, validated_data):
+    def create(self, validated_data): # sms
         user = User.objects.create_user(**validated_data)
         user.create_activation_code()
         send_activation_sms(user.phone, user.activation_code)
+        return user
+
+    def create(self, validated_data):  # email
+        user = User.objects.create_user(**validated_data)
+        user.create_activation_email()
+        send_activation_email.delay(user.email, user.activation_code)
         return user
 
 
@@ -51,7 +67,7 @@ class ActivationSerializer(serializers.Serializer):
         if not User.objects.filter(activation_code=code).exists():
             raise serializers.ValidationError('Invalid activation code')
 
-    def activate_account(self):
+    def activate_account(self): # sms
         phone = self.validated_data.get('phone')
         user = User.objects.get(phone=phone)
         user.is_active = True
@@ -96,7 +112,7 @@ class RestorePasswordSerializer(serializers.Serializer):
 
     phone = serializers.CharField(max_length=13, required=True)
 
-    def send_code(self):
+    def send_code(self): # sms
         phone = self.validated_data.get('phone')
         user = User.objects.get(phone=phone) 
         user.create_activation_code()
@@ -108,7 +124,16 @@ class RestorePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError('Invalid phone format')
         return phone
 
-
+    def send_code(self): # email
+        email = self.validated_data.get('email')
+        user = User.objects.get(email=email)
+        user.create_activation_code()
+        send_mail(
+            subject='Password restoration',
+            message=f'Your code for password restoration {user.activation_code}',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email]
+        )
 
 
 class SetRestoredPasswordSerializer(serializers.Serializer):
@@ -139,9 +164,17 @@ class SetRestoredPasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError('Invalid phone format')
         return phone
 
-    def set_new_password(self):
+    def set_new_password(self): # sms
         phone = self.validated_data.get('phone')
         user = User.objects.get(phone=phone)
+        new_password = self.validated_data.get('new_password')
+        user.set_password(new_password)
+        user.activation_code = ''
+        user.save()
+
+    def set_new_password(self): # email
+        email = self.validated_data.get('email')
+        user = User.objects.get(email=email)
         new_password = self.validated_data.get('new_password')
         user.set_password(new_password)
         user.activation_code = ''

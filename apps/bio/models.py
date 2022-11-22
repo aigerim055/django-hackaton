@@ -36,4 +36,3 @@ class ProfileImage(models.Model):
         on_delete=models.CASCADE,
         related_name='profile_images'
     )
-    avatar = models.ImageField(upload_to='media')

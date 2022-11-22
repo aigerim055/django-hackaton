@@ -29,11 +29,11 @@ class Order(models.Model):
     status = models.CharField(max_length=11, choices=STATUS_CHOICES, default='open')
     confirmation_code = models.CharField(max_length=6, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    reward = models.ForeignKey(
-        to=UserProfile,
-        on_delete=models.CASCADE,
-        related_name='rewards'
-    )
+    # reward = models.ForeignKey(
+    #     to=UserProfile,
+    #     on_delete=models.CASCADE,
+    #     related_name='rewards'
+    # )
 
     def __str__(self):
         return f'Order #{self.order_id}'

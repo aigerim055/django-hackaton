@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.crypto import get_random_string
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-
+# from random import randint
 
 class UserManager(BaseUserManager):
     
