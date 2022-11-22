@@ -5,7 +5,7 @@ from rest_framework import status, mixins
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.decorators import action
+# from rest_framework.decorators import action
 
 from .serializers import (
     RegistrationSerializer,
@@ -40,48 +40,48 @@ class ActivationView(APIView): # Phone Activation View
 
 
 # class 
-    def get(self, request, activation_code): # email
-        user = User.objects.filter(activation_code=activation_code).first()
-        if not user:
-            return Response(
-                'Page not found.' ,
-                status=status.HTTP_404_NOT_FOUND
-                )
-        user.is_active = True
-        user.activation_code = ''
-        user.save()
-        return Response(
-            'Account activated. You can login now.',
-            status=status.HTTP_200_OK
-            )
+    # def get(self, request, activation_code): # email
+    #     user = User.objects.filter(activation_code=activation_code).first()
+    #     if not user:
+    #         return Response(
+    #             'Page not found.' ,
+    #             status=status.HTTP_404_NOT_FOUND
+    #             )
+    #     user.is_active = True
+    #     user.activation_code = ''
+    #     user.save()
+    #     return Response(
+    #         'Account activated. You can login now.',
+    #         status=status.HTTP_200_OK
+    #         )
 
 
-class ActivationViewSet(mixins.CreateModelMixin,
-                       GenericViewSet):
-    queryset = User.objects.all()
+# class ActivationViewSet(mixins.CreateModelMixin,
+#                        GenericViewSet):
+#     queryset = User.objects.all()
 
-    def get_serializer_class(self):
-        if self.action == 'phone':
-            return ...
-        if self.action == 'phone':
-            return ...
+#     def get_serializer_class(self):
+#         if self.action == 'phone':
+#             return ...
+#         if self.action == 'phone':
+#             return ...
 
 
-    @action(detail=True, methods=['POST'])
-    def activate_via_email(self, request, activation_code):
-        user = User.objects.filter(activation_code=activation_code).first()
-        if not user:
-            return Response(
-                'Page not found.' ,
-                status=status.HTTP_404_NOT_FOUND
-                )
-        user.is_active = True
-        user.activation_code = ''
-        user.save()
-        return Response(
-            'Account activated. You can login now.',
-            status=status.HTTP_200_OK
-            )
+#     @action(detail=True, methods=['POST'])
+#     def activate_via_email(self, request, activation_code):
+#         user = User.objects.filter(activation_code=activation_code).first()
+#         if not user:
+#             return Response(
+#                 'Page not found.' ,
+#                 status=status.HTTP_404_NOT_FOUND
+#                 )
+#         user.is_active = True
+#         user.activation_code = ''
+#         user.save()
+#         return Response(
+#             'Account activated. You can login now.',
+#             status=status.HTTP_200_OK
+#             )
 
 
 
@@ -108,14 +108,14 @@ class RestorePasswordView(APIView):
                 status=status.HTTP_200_OK
             )
  
-    def post(self, request: Request):  # email
-        serializer = RestorePasswordSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.send_code()
-            return Response(
-                'Code for restoring your password has been sent ot your email.',
-                status=status.HTTP_200_OK
-            )
+    # def post(self, request: Request):  # email
+    #     serializer = RestorePasswordSerializer(data=request.data)
+    #     if serializer.is_valid(raise_exception=True):
+    #         serializer.send_code()
+    #         return Response(
+    #             'Code for restoring your password has been sent ot your email.',
+    #             status=status.HTTP_200_OK
+    #         )
 
 
 class SetRestoredPasswordView(APIView):
@@ -128,14 +128,14 @@ class SetRestoredPasswordView(APIView):
                 status=status.HTTP_200_OK
             )
 
-    def post(self, request: Request): # email
-        serializer = SetRestoredPasswordSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.set_new_password()
-            return Response(
-                'Your password has been restored.',
-                status=status.HTTP_200_OK
-            )
+    # def post(self, request: Request): # email
+    #     serializer = SetRestoredPasswordSerializer(data=request.data)
+    #     if serializer.is_valid(raise_exception=True):
+    #         serializer.set_new_password()
+    #         return Response(
+    #             'Your password has been restored.',
+    #             status=status.HTTP_200_OK
+    #         )
 
 
 class DeleteAccountView(APIView):

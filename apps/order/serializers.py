@@ -44,4 +44,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class OrderHistorySerializer(serializers.ModelSerializer):
     book = serializers.ReadOnlyField(source='order.get_absolute_url')
+
+    class Meta:
+        model = Order
+        fields = '__all__'
      

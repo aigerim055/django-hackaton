@@ -27,8 +27,8 @@ from .serializers import (
 
 class AuthorViewSet(ModelViewSet):
     queryset = Author.objects.all()
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['name']
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['name']
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -52,8 +52,8 @@ class AuthorViewSet(ModelViewSet):
 
 class BookViewSet(ModelViewSet):
     queryset = Book.objects.all()
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['title', 'year_published', 'in_stock', 'genre', 'price', 'author']
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['title', 'year_published', 'in_stock', 'genre', 'price', 'author']
 
     def get_serializer_class(self):
         if self.action == 'list':
