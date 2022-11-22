@@ -12,7 +12,7 @@ router = DefaultRouter()
 router.register('orders', OrderViewSet, 'orders')
 
 urlpatterns = [
-    path('history/', OrderHistoryView.as_view(), name='orer-history')
+    path('order-history/', OrderHistoryView.as_view(), name='orer-history')
 ]
 
 urlpatterns += router.urls
