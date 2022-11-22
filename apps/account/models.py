@@ -36,6 +36,7 @@ class User(AbstractBaseUser):
 
     username = models.CharField(max_length=50, primary_key=True, unique=True)
     phone = models.CharField(max_length=13)  # , unique=True)
+    email = models.CharField(max_length=255, unique=True, null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=10, blank=True)

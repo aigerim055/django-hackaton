@@ -41,7 +41,8 @@ class Order(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if not self.order_id:
-            self.order_id = str(self.user.username) + str(self.created_at)[:10]
+            self.order_id = str(self.user.username) + '-' + (str(self.created_at))[5:16].replace(':', '-').replace(' ', '-')
+            # self.order_id = ''.join([i for i in self.order_id if i not in '.: -'])
         return self.order_id
 
 
