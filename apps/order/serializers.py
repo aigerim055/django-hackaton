@@ -40,3 +40,8 @@ class OrderSerializer(serializers.ModelSerializer):
         order.total_sum = total_sum
         order.save()
         return order
+
+
+class OrderHistorySerializer(serializers.ModelSerializer):
+    book = serializers.ReadOnlyField(source='order.get_absolute_url')
+     
