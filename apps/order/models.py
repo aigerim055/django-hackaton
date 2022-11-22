@@ -46,8 +46,8 @@ class Order(models.Model):
             # self.order_id = ''.join([i for i in self.order_id if i not in '.: -'])
         return self.order_id
 
-    def get_absolute_url(self):
-        return reverse("order-detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("order-detail", kwargs={"pk": self.pk})
 
 
 class OrderItems(models.Model):
