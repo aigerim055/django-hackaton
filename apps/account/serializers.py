@@ -11,11 +11,11 @@ User = get_user_model()
 
 
 def email_validator(email):
-        if not User.objects.filter(email=email).exists():
-            raise serializers.ValidationError(
-                'User with such email is not found.'
-            )
-        return email
+    if not User.objects.filter(email=email).exists():
+        raise serializers.ValidationError(
+            'User with such email is not found.'
+        )
+    return email
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'phone', 'password', 'password_confirm')
+        fields = ('username', 'phone', 'password', 'password_confirm') # email
 
     def validate_phone(self, phone):
         if len(phone) != 13:
@@ -41,17 +41,17 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data): # sms
         user = User.objects.create_user(**validated_data)
         user.create_activation_code()
-        send_activation_sms(user.phone, user.activation_code)
+        send_activation_sms.delay(user.phone, user.activation_code)
         return user
 
     def create(self, validated_data):  # email
         user = User.objects.create_user(**validated_data)
-        user.create_activation_email()
+        user.create_activation_code()
         send_activation_email.delay(user.email, user.activation_code)
         return user
 
 
-class ActivationSerializer(serializers.Serializer):
+class PhoneActivationSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=13, required=True)
     code = serializers.CharField(max_length=10, required=True)
 
@@ -112,17 +112,18 @@ class RestorePasswordSerializer(serializers.Serializer):
 
     phone = serializers.CharField(max_length=13, required=True)
 
-    def send_code(self): # sms
-        phone = self.validated_data.get('phone')
-        user = User.objects.get(phone=phone) 
-        user.create_activation_code()
-        send_activation_sms(user.phone, user.activation_code)
 
     def validate_phone(self, phone):
         phone = normalize_phone(phone)
         if len(phone) != 13:
             raise serializers.ValidationError('Invalid phone format')
         return phone
+
+    def send_code(self): # sms
+        phone = self.validated_data.get('phone')
+        user = User.objects.get(phone=phone) 
+        user.create_activation_code()
+        send_activation_sms(user.phone, user.activation_code)
 
     def send_code(self): # email
         email = self.validated_data.get('email')

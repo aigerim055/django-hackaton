@@ -9,7 +9,8 @@ from .views import (
     ActivationView,
     ChangePasswordView,
     SetRestoredPasswordView,
-    RestorePasswordView
+    RestorePasswordView,
+    DeleteAccountView
 )
 
 
@@ -21,4 +22,5 @@ urlpatterns = [
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('restore-password/', RestorePasswordView.as_view(), name='restore_pasword'),
     path('set-restored-password/', SetRestoredPasswordView.as_view(), name='set_restored_password'),
+    path('delete-account/', DeleteAccountView.as_view(), name='delete account'),
 ]
