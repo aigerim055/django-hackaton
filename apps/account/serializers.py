@@ -28,8 +28,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate_phone(self, phone):
         if len(phone) != 13:
-            raise serializers.ValidationError('Invalid phone format!')
+            raise serializers.ValidationError('Invalid phone format')
         return phone
+
+    def validate_email(self, email):
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError('The email is already in use')
+        return email
 
     def validate(self, attrs):
         password = attrs.get('password')
@@ -41,12 +46,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data): # sms
         user = User.objects.create_user(**validated_data)
         user.create_activation_code()
+
         send_activation_sms.delay(user.phone, user.activation_code)
         return user
 
     def create(self, validated_data):  # email
         user = User.objects.create_user(**validated_data)
         user.create_activation_code()
+
         send_activation_email.delay(user.email, user.activation_code)
         return user
 
