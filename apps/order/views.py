@@ -13,8 +13,8 @@ from .serializers import (
 class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]   # IsOwner    filtration
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['created_at']
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['created_at']
 
     def get_queryset(self):
         user = self.request.user
