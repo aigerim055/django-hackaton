@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from apps.bio.models import UserProfile
 from apps.book.models import Book
@@ -44,6 +45,9 @@ class Order(models.Model):
             self.order_id = str(self.user.username) + '-' + (str(self.created_at))[5:16].replace(':', '-').replace(' ', '-')
             # self.order_id = ''.join([i for i in self.order_id if i not in '.: -'])
         return self.order_id
+
+    def get_absolute_url(self):
+        return reverse("order-detail", kwargs={"pk": self.pk})
 
 
 class OrderItems(models.Model):

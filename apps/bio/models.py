@@ -15,7 +15,7 @@ class UserProfile(models.Model):
     last_name = models.CharField('last name', max_length=40)
     bio = models.TextField(default='', blank=True)
 
-    avatar = models.ImageField(upload_to='media')   #upload_to='media')    #######
+    avatar = models.ImageField(upload_to='profile_image')   #upload_to='media')    #######
     birthday = models.DateField(null=True, blank=True)                         # settings include format   # формат как проверяется, выпдает ли календарь
     phone = models.CharField(max_length=14, null=True)    # проверка на номер телефона
     cashback = models.PositiveIntegerField(verbose_name='cashback', default=0)
