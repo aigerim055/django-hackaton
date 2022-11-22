@@ -28,7 +28,7 @@ class RegistrationView(APIView):
             )
 
 
-class PhoneActivationView(APIView):
+class ActivationView(APIView): # Phone Activation View
     def post(self, request: Request): # sms
         serilizer = PhoneActivationSerializer(data=request.data)
         if serilizer.is_valid(raise_exception=True):
