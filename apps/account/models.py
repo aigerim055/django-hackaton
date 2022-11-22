@@ -1,5 +1,7 @@
+import code
 from django.db import models
 from django.utils.crypto import get_random_string
+# from random import randint
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 # from random import randint
 
@@ -29,6 +31,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
+    RANDOM_STRING_CHARS = "1234567890"
+
+
     username = models.CharField(max_length=50, primary_key=True, unique=True)
     phone = models.CharField(max_length=13)  # , unique=True)
     is_staff = models.BooleanField(default=False)
@@ -47,7 +52,7 @@ class User(AbstractBaseUser):
         return self.is_staff
 
     def create_activation_code(self):
-        code = get_random_string(length=10)
+        code = get_random_string(length=6, allowed_chars=self.RANDOM_STRING_CHARS)
         if User.objects.filter(activation_code=code).exists():
             self.create_activation_code()
         self.activation_code = code
