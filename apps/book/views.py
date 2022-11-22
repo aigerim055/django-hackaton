@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework import mixins
+from django_filters.rest_framework import DjangoFilterBackend  # для фильтрации
 
 from .permissions import IsOwner
 
@@ -26,6 +27,8 @@ from .serializers import (
 
 class AuthorViewSet(ModelViewSet):
     queryset = Author.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name']
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -49,6 +52,8 @@ class AuthorViewSet(ModelViewSet):
 
 class BookViewSet(ModelViewSet):
     queryset = Book.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['title', 'year_published', 'in_stock', 'genre', 'price', 'author']
 
     def get_serializer_class(self):
         if self.action == 'list':

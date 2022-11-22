@@ -10,9 +10,9 @@ class TabularInlineImages(admin.TabularInline):
 
 
 
-class ProfieAdmin(admin.ModelAdmin):
+class ProfileAdmin(admin.ModelAdmin):
     model = UserProfile
     inlines = [TabularInlineImages]
     # exclude = ['cashback']
 
-admin.site.register(UserProfile, ProfieAdmin)
+admin.site.register(UserProfile, ProfileAdmin)

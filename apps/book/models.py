@@ -38,21 +38,21 @@ class Book(models.Model):
         on_delete=models.CASCADE,
         related_name='books'
     )
-    description = models.TextField(blank=True, null=True) # null=True?
+    description = models.TextField(null=True)#, blank=True, ) # null=True?
     image = models.ImageField(upload_to='books_images')
     genre = models.ManyToManyField(
         to='Genre',
-        related_name='books',
-        blank=True
+        related_name='books'#,
+        #blank=True
     )
     price = models.DecimalField(max_digits=7, decimal_places=2)
-    year_published = models.PositiveSmallIntegerField(blank=True)   
-    pages = models.PositiveSmallIntegerField(blank=True, default=0)   
+    year_published = models.PositiveSmallIntegerField()#blank=True)   
+    pages = models.PositiveSmallIntegerField(default=0)#, blank=True, )   
     quantity = models.PositiveSmallIntegerField(default=0)
     views_count = models.IntegerField(default=0)
     in_stock = models.BooleanField(default=True)
 
-    def __str__(self) -> str:
+    def __str__(self) -> str:             # чтоб запрашивал стр год кол-во
         return self.title
 
     def save(self, *args, **kwargs):
@@ -65,6 +65,15 @@ class Book(models.Model):
         ordering = ['title']  
         verbose_name = 'Book'
         verbose_name_plural = 'Books'
+
+
+class BookImage(models.Model):
+    image = models.ImageField(upload_to='media')
+    book = models.ForeignKey(
+        to=Book,
+        on_delete=models.CASCADE,
+        related_name='book_images'
+    )
 
 
 class Genre(models.Model):                                       

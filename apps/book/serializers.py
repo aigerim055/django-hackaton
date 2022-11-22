@@ -3,7 +3,8 @@ from rest_framework import serializers
 from .models import(
     Author,
     Book,
-    Genre
+    Genre,
+    BookImage
 )
 
 
@@ -29,6 +30,8 @@ class BookListSerializer(serializers.ModelSerializer):
 
 class BookSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source='user.username')
+    # views_count = serializers.ReadOnlyField(source='book.views_count')
+
     class Meta:
         model = Book
         fields = '__all__'
@@ -60,6 +63,20 @@ class BookSerializer(serializers.ModelSerializer):
         book = Book.objects.create(**validated_data)
         book.genre.set(genre)
         return book
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['image'] = BookImageSerializer(
+            instance.book_images.all(),
+            many=True
+        ).data 
+        return rep
+
+
+class BookImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookImage
+        fields = 'image'
 
 
 class AuthorListSerializer(serializers.ModelSerializer):
