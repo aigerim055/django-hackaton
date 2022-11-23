@@ -10,9 +10,8 @@ from .views import (
     ChangePasswordView,
     SetRestoredPasswordView,
     RestorePasswordView,
-    DeleteAccountView
+    DeleteAccountView,
 )
-
 
 urlpatterns = [
     path('registration/', RegistrationView.as_view(), name='registartion'),
