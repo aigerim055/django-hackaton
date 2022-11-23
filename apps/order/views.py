@@ -24,11 +24,15 @@ class OrderViewSet(ModelViewSet):
     filterset_fields = ['status']
     ordering_fields = ['created_at', 'status']
     search_fields = ['order_id', 'status']
-    
 
     def get_queryset(self):
         user = self.request.user
         return Order.objects.filter(user=user)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 
 class OrderHistoryView(ListAPIView):
