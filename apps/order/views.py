@@ -22,7 +22,7 @@ class OrderViewSet(ModelViewSet):
         filters.OrderingFilter
         ]
     filterset_fields = ['status']
-    ordering_fields = ['created_at']
+    ordering_fields = ['created_at', 'status']
     search_fields = ['order_id', 'status']
     
 

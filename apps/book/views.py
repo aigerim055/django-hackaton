@@ -38,7 +38,7 @@ class AuthorViewSet(ModelViewSet):
         filters.OrderingFilter
         ]
     filterset_fields = ['name']
-    search_fields = ['first_name', 'last_name']
+    search_fields = ['first_name', 'last_name', 'last_name']
 
 
     def get_serializer_class(self):
@@ -70,7 +70,7 @@ class BookViewSet(ModelViewSet):
         filters.OrderingFilter
         ]
     filterset_fields = ['title', 'year_published', 'in_stock', 'genre', 'price', 'author']
-    search_fields = ['title', 'author', 'genre']
+    search_fields = ['title', 'author', 'genre', 'author.last_name', 'author.first_name']
 
     def get_serializer_class(self):
         if self.action == 'list':
