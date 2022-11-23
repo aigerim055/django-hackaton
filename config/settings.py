@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'apps.bio',
     'apps.order',
     'apps.review',
+    'apps.follow',
 ]
 
 MIDDLEWARE = [
