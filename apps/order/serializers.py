@@ -24,12 +24,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, *args, **kwargs):
         user = self.context['request'].user
-        print(user)
         profile = UserProfile.objects.filter(user=user)
-        print(profile)
 
-        # user = 
-        # super().save(*args, **kwargs)
         items = validated_data.pop('items')
         validated_data['user'] = self.context['request'].user
         order = super().create(validated_data) # Order.objects.create
@@ -43,18 +39,28 @@ class OrderSerializer(serializers.ModelSerializer):
             ))
             total_sum += item['book'].price * item['quantity']
         OrderItems.objects.bulk_create(orders_items, *args, **kwargs)
+
         reward = int(profile.values('cashback')[0]['cashback'])
         order.total_sum = total_sum - total_sum*reward/100
-        print(order.total_sum)
+
         collected_sum = int(profile.values('collected_sum')[0]['collected_sum'])
         collected_sum += order.total_sum
-        UserProfile.objects.filter(user=user).update(
-        collected_sum=collected_sum,
-)
-        # print(collected_sum)
+
+        profile.update(
+            collected_sum=collected_sum)
+
+        check_cashback = int(profile.values('collected_sum')[0]['collected_sum']) 
+        if check_cashback >= 10000:
+            profile.update(
+                cashback=5)
+        if check_cashback >= 20000:
+            profile.update(
+                cashback=7)
+        if check_cashback >= 30000:
+            profile.update(
+                cashback=10)
+                
         order.save()
-        # profile.save()
-        print(profile.values('collected_sum')[0]['collected_sum'])
         return order
 
 
