@@ -12,3 +12,4 @@ twilio
 
 celery
 redis
+gunicorn
