@@ -27,4 +27,5 @@ urlpatterns = [
     path('api/profile/', include('apps.bio.urls')),
     path('api/', include('apps.order.urls')),
     path('api/review/', include('apps.review.urls')),
+    path('api/follow/', include('apps.follow.urls')),
 ]

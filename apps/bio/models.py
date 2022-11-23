@@ -21,6 +21,7 @@ class UserProfile(models.Model):
     cashback = models.PositiveIntegerField(verbose_name='cashback', default=3)
     collected_sum = models.PositiveIntegerField(default=0)
     registered_at = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}' 
@@ -38,3 +39,5 @@ class ProfileImage(models.Model):
         related_name='profile_images',
         # blank=True
     )
+
+
