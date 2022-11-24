@@ -5,14 +5,12 @@ from .models import (
     OrderItems
 )
 from apps.bio.models import UserProfile
-from apps.account.models import User
+from apps.book.models import Book
 
 class OrderItemsSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItems
         fields = ['book', 'quantity']
-
-        # if self.products.quantity  -  добавить проверки
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -59,7 +57,7 @@ class OrderSerializer(serializers.ModelSerializer):
         if check_cashback >= 30000:
             profile.update(
                 cashback=10)
-                
+
         order.save()
         return order
 

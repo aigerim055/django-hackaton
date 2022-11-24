@@ -12,7 +12,7 @@ from .models import(
 
 class BookListSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(
-        source='author.name'   # books.name?
+        source='author.name'  
     )
 
     class Meta:
@@ -31,10 +31,8 @@ class BookListSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
-    # user = serializers.ReadOnlyField(source='user.username')
-    # views_count = serializers.ReadOnlyField(source='book.views_count')
-    logger.warning('WARNING')
-    
+    # logger.warning('WARNING')
+
     class Meta:
         model = Book
         fields = '__all__'
@@ -52,8 +50,6 @@ class BookSerializer(serializers.ModelSerializer):
         return quantity
 
     def validate(self, attrs):
-        # user = self.context['request'].user   # надо ли? в нашем случае
-        # attrs['user'] = user                  # надо ли? в нашем случае
         title = attrs.get('title')
         if Book.objects.filter(title=title).exists():
             raise serializers.ValidationError(
@@ -61,7 +57,7 @@ class BookSerializer(serializers.ModelSerializer):
             ) 
         return attrs
  
-    def create(self, validated_data):                       # надо ли
+    def create(self, validated_data):                
         genre = validated_data.pop('genre')
         book = Book.objects.create(**validated_data)
         book.genre.set(genre)
