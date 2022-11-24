@@ -1,14 +1,11 @@
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework import mixins, filters
-from django_filters.rest_framework import DjangoFilterBackend  # для фильтрации
+
 from django_filters import rest_framework as rest_filter
-from django.utils.decorators import method_decorator  # cashing
+from django.utils.decorators import method_decorator 
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-
-
-from .permissions import IsOwner
 
 from .models import (
     Author,
@@ -32,9 +29,6 @@ from .serializers import (
 
 class AuthorViewSet(ModelViewSet):
     queryset = Author.objects.all()
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['name']
-    # filter_backends = [DjangoFilterBackend]
     filter_backends = [
         filters.SearchFilter, 
         rest_filter.DjangoFilterBackend, 
@@ -71,7 +65,6 @@ class AuthorViewSet(ModelViewSet):
 
 class BookViewSet(ModelViewSet):
     queryset = Book.objects.all()
-    # filter_backends = [DjangoFilterBackend]
     filter_backends = [
         filters.SearchFilter, 
         rest_filter.DjangoFilterBackend, 

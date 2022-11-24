@@ -38,21 +38,20 @@ class Book(models.Model):
         on_delete=models.CASCADE,
         related_name='books'
     )
-    description = models.TextField(null=True)#, blank=True, ) # null=True?
+    description = models.TextField(null=True)
     image = models.ImageField(upload_to='books_images')
     genre = models.ManyToManyField(
         to='Genre',
         related_name='books'#,
-        #blank=True
     )
     price = models.DecimalField(max_digits=7, decimal_places=2)
-    year_published = models.PositiveSmallIntegerField()#blank=True)   
-    pages = models.PositiveSmallIntegerField(default=0)#, blank=True, )   
+    year_published = models.PositiveSmallIntegerField() 
+    pages = models.PositiveSmallIntegerField(default=0) 
     quantity = models.PositiveSmallIntegerField(default=0)
     views_count = models.IntegerField(default=0)
     in_stock = models.BooleanField(default=True)
 
-    def __str__(self) -> str:             # чтоб запрашивал стр год кол-во
+    def __str__(self) -> str:          
         return self.title
 
     def save(self, *args, **kwargs):

@@ -1,5 +1,3 @@
-
-
 from rest_framework import serializers
 
 from .models import (
@@ -7,7 +5,6 @@ from .models import (
     OrderItems
 )
 from apps.bio.models import UserProfile
-from apps.book.models import Book
 
 class OrderItemsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,7 +62,11 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderHistorySerializer(serializers.ModelSerializer):
+
+    # url = serializers.ReadOnlyField(source='order.get_absolute_url')
+    # book = serializers.ReadOnlyField(source='order.book')
     
     class Meta:
         model = Order
         fields = ('order_id', 'address', 'total_sum', 'status', 'created_at', 'books')
+

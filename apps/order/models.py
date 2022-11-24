@@ -1,10 +1,6 @@
-
-
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 
-from apps.bio.models import UserProfile
 from apps.book.models import Book
 
 User = get_user_model()

@@ -9,7 +9,6 @@ from .models import (
 )
 
 
-
 User = get_user_model()
 
 
@@ -21,15 +20,14 @@ class UserProfileCreateSerializer(serializers.Serializer):
     avatar_carousel = serializers.ListField(
         child=serializers.ImageField(),
         write_only=True,
-        # blank=True
     )
 
     first_name = serializers.CharField(max_length=20)
     last_name = serializers.CharField(max_length=40)
     bio = serializers.CharField(max_length=5000)
-    avatar = serializers.ImageField()                          #######
-    birthday = serializers.DateField()                         # settings include format   # формат как проверяется, выпдает ли календарь
-    phone = serializers.CharField(max_length=14)    # normalize
+    avatar = serializers.ImageField()                         
+    birthday = serializers.DateField()                        
+    phone = serializers.CharField(max_length=14)    
 
     def create(self, validated_data):
         avatar_carousel = validated_data.pop('avatar_carousel')
@@ -50,7 +48,7 @@ class UserProfileCreateSerializer(serializers.Serializer):
     class Meta:
         model = UserProfile
         fields = ('__all__')
-        # exclude = ['cashback']
+
 
 
 
@@ -63,7 +61,6 @@ class UserProfileListSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        # exclude = ['cashback']
         fields = '__all__'
 
     def to_representation(self, instance):

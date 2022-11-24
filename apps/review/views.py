@@ -1,9 +1,6 @@
-from crypt import methods
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import(
-    IsAdminUser,
-    IsAuthenticated,
-    AllowAny,
+    IsAuthenticated
 )
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -13,11 +10,9 @@ from apps.bio.permissions import IsOwner
 from .models import Favorite, Comment, Rating
 from .serializers import (
     FavoriteSerializer,
-    # FavoritesListSerializer,
     CommentSerializer,
     RatingSerializer,
 )
-
 
 
 class FavoriteViewSet(mixins.CreateModelMixin,
@@ -29,13 +24,6 @@ class FavoriteViewSet(mixins.CreateModelMixin,
 
     def perform_create(self, serializer): # для чего эта функция, чтобы не рописыать юзера в запрроме
         serializer.save(user=self.request.user)
-
-    # def get_serializer_class(self):
-    #     if self.action == 'like' and self.request.method in ['POST', 'LIST']:
-    #         return FavoriteSerializer
-    #     # if self.action == 'favorite' and self.request.method == 'LIST':
-    #     #     return Favorite
-    #     return super().get_serializer_class()
 
     def get_permissions(self):
         if self.action == 'favorite' and self.request.method == 'POST':
@@ -91,6 +79,3 @@ class RatingView(mixins.CreateModelMixin,
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
-
-    # def perform_create(self, serializer): 
-    #     serializer.save(user=self.request.user)

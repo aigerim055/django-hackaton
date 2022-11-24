@@ -17,11 +17,9 @@ class CurrentBookDefault:
 
 class FavoriteSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
-    # book = serializers.HiddenField(default=CurrentBookDefault())
 
     class Meta:
         model = Favorite
-        # exclude = ['id']
         fields = '__all__'
 
     def create(self, validated_data):
@@ -44,22 +42,6 @@ class FavoriteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('This book is not in favorites')
 
 
-# class FavoriteListSerializer(serializers.ModelSerializer):
-#     # user = serializers.ReadOnlyField(source='account.username')
-
-#     user = UserListSerializer(read_only=True, many=True)  
-#     class Meta:
-#         model = Favorite
-#         fields = ['user', 'book']
-
-    # def to_representation(self, instance: Genre):
-    #     books = instance.books.all()
-    #     representation = super().to_representation(instance)  
-    #     representation['books'] = BookListSerializer(
-    #         instance=books, many=True).data
-    #     return representation
-
-
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
 
@@ -69,7 +51,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    # user = serializers.ReadOnlyField(source='user.username')
     
     class Meta:
         model = Comment

@@ -20,16 +20,6 @@ class BookListSerializer(serializers.ModelSerializer):
         fields = ['author', 'title', 'genre', 'image']
 
 
-# class CurrentAuthorDefault:
-#     requires_context = True
-
-#     def __call__(self, serializer_field):
-#         return serializer_field.context['request'].author
-
-#     def __repr__(self):
-#         return '%s()' % self.__class__.__name__
-
-
 class BookSerializer(serializers.ModelSerializer):
     # logger.warning('WARNING')
 

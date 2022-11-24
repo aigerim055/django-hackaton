@@ -1,9 +1,7 @@
-from django.shortcuts import render
-
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .serializers import FollowersSerializer, FollowingSerializer
+from .serializers import FollowingSerializer
 from .models import UserFollowing
 
 
