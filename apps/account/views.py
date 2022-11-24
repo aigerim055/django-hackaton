@@ -17,64 +17,15 @@ from .serializers import (
 
 User = get_user_model()
 
-# class RegistrationView(mixins.CreateModelMixin,
-#     GenericViewSet):
-
-#     def post(self, request: Request):
-#         print(request)
-#         serializer = RegistrationSerializer(data=request.data)
-#         if serializer.is_valid(raise_exception=True):
-#             serializer.save()
-#             return Response(
-#                 'Thanks for registration! Activate your account', 
-#                 status=status.HTTP_201_CREATED
-#             )
-
-class RegistrationViewSet(mixins.CreateModelMixin,
-                       GenericViewSet):
-    queryset = User.objects.all()
-    serializer_class = RegistrationSerializer
-    
-    # def get_serializer_class(self):
-    #     if self.action == 'activate_via_phone':
-    #         return ...
-    #     if self.action == 'phone':
-    #         return ...
-
-
-    @action(detail=True, methods=['POST'], url_path='activate_phone', pk=None)
-    def activate_via_phone(self, request, activation_code, pk=None):
-        user = User.objects.create_user(**validated_data)
-        user.create_activation_code()
-        send_activation_code.delay(user.email, user.activation_code)
-        send_activation_sms.delay(user.phone, user.activation_code)
-        return user 
-            
-
-
-    @action(detail=True, methods=['POST'], pk=None)
-    def activate_via_email(self, request, activation_code, pk=None):
-        user = User.objects.filter(activation_code=activation_code).first()
-        if not user:
-            return Response(
-                'Page not found.' ,
-                status=status.HTTP_404_NOT_FOUND
-                )
-        user.is_active = True
-        user.activation_code = ''
-        user.save()
-        return Response(
-            'Account activated. You can login now.',
-            status=status.HTTP_200_OK
-            )
-
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):  # какой респонс прилетает
+class RegistrationView(APIView):
+    def post(self, request: Request):
+        serializer = RegistrationSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(
-                'Thanks for registration. Activate your account via link in your email.',
+                'Thanks for registration! Activate your account', 
                 status=status.HTTP_201_CREATED
-                )
+            )
 
 
 class ActivationView(APIView):
