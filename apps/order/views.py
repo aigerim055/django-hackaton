@@ -14,8 +14,7 @@ from .serializers import (
 
 class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]   # IsOwner    filtration
-    # filter_backends = [DjangoFilterBackend]
+    permission_classes = [IsAuthenticated]   
     filter_backends = [
         filters.SearchFilter, 
         rest_filter.DjangoFilterBackend, 
@@ -43,11 +42,3 @@ class OrderHistoryView(ListAPIView):
         user = self.request.user
         return Order.objects.filter(user=user)
        
-
-# create - authenticated 
-# retrieve - is owner
-# list - is owner
-# update - is owner - убрать
-# delete - is owner
-
-# менять статус с 
