@@ -18,13 +18,40 @@ def email_validator(email):
     return email
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
+class PhoneRegistrationSerializer(serializers.ModelSerializer):
 
     password_confirm = serializers.CharField(required=True)
 
     class Meta:
         model = User
-        fields = ('username','email', 'phone', 'password', 'password_confirm', 'code_confirm') # email
+        fields = ('username', 'email', 'phone', 'password', 'password_confirm', 'code_confirm')
+
+    def validate_phone(self, phone):
+        if len(phone) != 13:
+            raise serializers.ValidationError('Invalid phone format')
+        return phone
+
+    def validate(self, attrs):
+        password = attrs.get('password')
+        password_confirm = attrs.pop('password_confirm')
+        if password != password_confirm:
+            raise serializers.ValidationError('Passwords do not match')
+        return attrs
+
+    def create(self, validated_data): 
+        user = User.objects.create_user(**validated_data)
+        user.create_activation_code()
+        send_activation_sms.delay(user.phone, user.activation_code)
+        return user 
+
+
+class EmailRegistrationSerializer(serializers.ModelSerializer):
+
+    password_confirm = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'phone', 'password', 'password_confirm', 'code_confirm')
 
     def validate_phone(self, phone):
         if len(phone) != 13:

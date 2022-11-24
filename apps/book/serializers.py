@@ -1,4 +1,6 @@
 from rest_framework import serializers
+import logging
+logger = logging.getLogger(__name__)
 
 from .models import(
     Author,
@@ -31,7 +33,8 @@ class BookListSerializer(serializers.ModelSerializer):
 class BookSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source='user.username')
     # views_count = serializers.ReadOnlyField(source='book.views_count')
-
+    logger.warning('WARNING')
+    
     class Meta:
         model = Book
         fields = '__all__'

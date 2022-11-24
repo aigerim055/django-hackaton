@@ -245,23 +245,11 @@ CACHES = {
     }
 }
 
-# from django.utils.decorators import method_decorator  # cashing
-# from django.views.decorators.cache import cache_page
-# from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 
-# @method_decorator(cache_page(60*15))
-#     @method_decorator(vary_on_cookie)
-
-
-# import logging
-# logger = logging.getLogger(__name__)
-
-# logger.warning('WARNING')
-
-EMAIL_BACKENDS = 'django.core.mail.backends.smtp.EmailBackend' # класс отвечающий за отправку писем
-EMAIL_HOST_USER = config('EMAIL_HOST_USER') # почта с которой отправляются письма
+EMAIL_BACKENDS = 'django.core.mail.backends.smtp.EmailBackend' 
+EMAIL_HOST_USER = config('EMAIL_HOST_USER') 
 EMAIL_PORT = config('EMAIL_PORT', default=587)
-EMAIL_HOST = config('EMAIL_HOST') # какой хост используется для отправки писем
-EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD') # пароль от почты
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool) # вид соединения для отправки писем\
+EMAIL_HOST = config('EMAIL_HOST') 
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD') 
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool) 
 

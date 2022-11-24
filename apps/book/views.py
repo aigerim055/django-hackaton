@@ -3,6 +3,9 @@ from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework import mixins, filters
 from django_filters.rest_framework import DjangoFilterBackend  # для фильтрации
 from django_filters import rest_framework as rest_filter
+from django.utils.decorators import method_decorator  # cashing
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 
 
 from .permissions import IsOwner
@@ -59,6 +62,11 @@ class AuthorViewSet(ModelViewSet):
         if self.action in ['create', 'destroy', 'update', 'partial_update']:
             self.permission_classes = [IsAdminUser]
         return super().get_permissions() 
+
+    @method_decorator(cache_page(60*2))
+    @method_decorator(vary_on_cookie)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
     
 
 class BookViewSet(ModelViewSet):
@@ -90,6 +98,10 @@ class BookViewSet(ModelViewSet):
         instance.save()
         return super().retrieve(request, *args, **kwargs)
 
+    @method_decorator(cache_page(60*2))
+    @method_decorator(vary_on_cookie)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
    
 class GenreViewSet(mixins.ListModelMixin,
     mixins.CreateModelMixin,
@@ -112,3 +124,8 @@ class GenreViewSet(mixins.ListModelMixin,
         if self.action in ['destroy', 'create']:
             self.permission_classes = [IsAdminUser]
         return super().get_permissions()
+
+    @method_decorator(cache_page(60*2))
+    @method_decorator(vary_on_cookie)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
