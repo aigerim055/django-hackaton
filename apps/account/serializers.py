@@ -41,8 +41,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data): 
         user = User.objects.create_user(**validated_data)
         user.create_activation_code()
-        send_activation_code.delay(user.email, user.activation_code)
-        send_activation_sms.delay(user.phone, user.acctivation_code)
+        if validated_data['code_confirm'] == 'email':
+            send_activation_code.delay(user.email, user.activation_code)
+        if validated_data['code_confirm'] == 'phone':
+            send_activation_sms.delay(user.phone, user.activation_code)
         return user 
 
 
