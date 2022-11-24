@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
 
-from .tasks import send_activation_sms, send_activation_email
+from .tasks import send_activation_sms, send_activation_code
 from .utils import normalize_phone
 
 
@@ -24,7 +24,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'phone', 'password', 'password_confirm') # email
+        fields = ('username','email', 'phone', 'password', 'password_confirm', 'code_confirm') # email
 
     def validate_phone(self, phone):
         if len(phone) != 13:
@@ -41,7 +41,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data): 
         user = User.objects.create_user(**validated_data)
         user.create_activation_code()
-        send_activation_sms.delay(user.phone, user.activation_code)
+        send_activation_code.delay(user.email, user.activation_code)
+        send_activation_sms.delay(user.phone, user.acctivation_code)
         return user 
 
 

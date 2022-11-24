@@ -17,17 +17,17 @@ def send_activation_sms(phone, activation_code):
 
 
 @app.task
-def send_activation_email(email, activation_code):
+def send_activation_code(email, activation_code):
     activation_link = f'http://localhost:8000/account/activate/{activation_code}/'
     html_message = render_to_string(
-        'account/code_mail.html', 
-        {'activation_code': activation_link}   # двойные {} в html
+        'account/code_mail.html',
+        {'activation_link': activation_link}
         )
     send_mail(
-        'Activate your account!',
+        'activate your account!',
         '',
         settings.EMAIL_HOST_USER,
-        {email},
+        [email],
         html_message=html_message,
-        fail_silently=False
+        fail_silently=False   
     )

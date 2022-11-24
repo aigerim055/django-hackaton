@@ -32,11 +32,15 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     RANDOM_STRING_CHARS = "1234567890"
-
+    CONFIRM_CHOISES = (
+        ('email', 'email'),
+        ('phone', 'phone')
+    )
 
     username = models.CharField(max_length=50, primary_key=True, unique=True)
     phone = models.CharField(max_length=13)  # , unique=True)
     email = models.CharField(max_length=255, unique=True, null=True)
+    code_confirm = models.CharField(choices=CONFIRM_CHOISES, max_length=6)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=10, blank=True)
