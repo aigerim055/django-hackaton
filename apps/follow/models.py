@@ -28,5 +28,4 @@ class UserFollowing(models.Model):
 
 
     def __str__(self) -> str:
-        # return super().__str__()
         return f'{self.user} follows {self.following_user}'
