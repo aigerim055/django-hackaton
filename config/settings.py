@@ -207,3 +207,10 @@ REST_FRAMEWORK = {
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+EMAIL_BACKENDS = 'django.core.mail.backends.smtp.EmailBackend' # класс отвечающий за отправку писем
+EMAIL_HOST_USER = config('EMAIL_HOST_USER') # почта с которой отправляются письма
+EMAIL_PORT = config('EMAIL_PORT', default=587)
+EMAIL_HOST = config('EMAIL_HOST') # какой хост используется для отправки писем
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD') # пароль от почты
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool) # вид соединения для отправки писем\
